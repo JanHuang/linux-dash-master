@@ -2,8 +2,9 @@
 ===================
 
 ## php环境要求
-1.pcntl扩展
-2.sockets扩展
+1.php version >= 5.3.3
+2.pcntl扩展
+3.sockets扩展
 
 ##安装步骤
 1.配置slave监听ip 和 端口 scripts/slave/config/**config.json** 修改**host** 和 **port**
