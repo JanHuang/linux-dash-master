@@ -3,7 +3,9 @@
 
 ## php环境要求
 1.php version >= 5.3.3
+
 2.pcntl扩展
+
 3.sockets扩展
 
 ##安装步骤
