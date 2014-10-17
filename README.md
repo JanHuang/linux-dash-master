@@ -8,10 +8,12 @@
 
 3.sockets扩展
 
+4.slave 需要运行在Linux. client 则可运行在window。
+
 ##安装步骤
 1.配置slave监听ip 和 端口 scripts/slave/config/**config.json** 修改**host** 和 **port**
 
-2.被检测机器运行scripts/slave/**slave**文件 **php slave start**
+2.被检测机器运行scripts/slave/sbin/**slave**文件 **php slave start**
 > **Note:** 需要注意的是，防火墙是否允许监听端口对外访问.  
 
 3.配置监听机**host** 和 端口 **port** scripts/master/config/**config.json**
