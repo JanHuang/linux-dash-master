@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+
+<?php
+/**
+ * Created by PhpStorm.
+ * User: JanHuang
+ * Date: 2014/10/14 0014
+ * Time: 下午 11:28
+ * Blog: http://blog.segmentfault.com/janhuang
+ * Github: https://www.github.com/janhuang
+ * Coding.net: https://www.coding.net/janhuang
+ */
+
+$socket = include __DIR__ . '/client.php';
+
+$socket->create()->connect(
+    $configuration->getConfig('slave.1.host'),
+    $configuration->getConfig('slave.1.port')
+);
+
+$commands = $socket->getConfig()->getConfig('commands');
+
+if ($argc <= 1) {
+    exit(
+        <<<EOF
+Please input command:
+\n
+EOF
+    );
+}
+
+if (!in_array($argv[1], $commands)) {
+    exit(
+        "Command not accept.\n"
+    );
+}
+
+$socket->send($socket->getSocket(), $argv[1]);
+
+echo $socket->read($socket->getSocket());

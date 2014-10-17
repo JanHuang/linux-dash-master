@@ -1,0 +1,9 @@
+<?php
+
+class Issue extends Libs\Core\Commands\CommandAbstract
+{
+    public function execute()
+    {
+        return $this->receiver->output(shell_exec('/usr/bin/lsb_release -ds;/bin/uname -r'));
+    }
+}

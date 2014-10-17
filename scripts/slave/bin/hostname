@@ -1,0 +1,9 @@
+<?php
+
+class HostName extends Libs\Core\Commands\CommandAbstract
+{
+    public function execute()
+    {
+        return $this->receiver->output(php_uname( 'n' ));
+    }
+}

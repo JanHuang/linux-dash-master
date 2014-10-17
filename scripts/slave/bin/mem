@@ -1,0 +1,14 @@
+<?php
+
+class Mem extends Libs\Core\Commands\CommandAbstract
+{
+    public function execute()
+    {
+        exec(
+            '/usr/bin/free -tmo | /usr/bin/awk \'BEGIN {OFS=","} {print $1,$2,$3-$6-$7,$4+$6+$7}\'',
+            $result
+        );
+
+        return $this->receiver->output( explode(',', $result[1]));
+    }
+}

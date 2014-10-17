@@ -1,0 +1,88 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Created by PhpStorm.
+ * User: JanHuang
+ * Date: 2014/10/14 0014
+ * Time: 下午 11:22
+ * Blog: http://blog.segmentfault.com/janhuang
+ * Github: https://www.github.com/janhuang
+ * Coding.net: https://www.coding.net/janhuang
+ */
+
+set_time_limit(0);
+
+$action = isset($argv[1]) ? $argv[1] : null;
+
+$sock = '/tmp/slave.pid';
+
+$start = function () use ($sock) {
+    echo "slave start...\t";
+
+    $pid = 0;
+    if (file_exists($sock)) {
+        $pid = file_get_contents($sock);
+        $pid = (int)$pid;
+    }
+    if ($pid > 0) {
+        exec("ps axu | grep {$pid} | grep -v grep | wc -l", $output);
+        if ($output[0] >= 1) {
+            echo "slave is running. pid {$pid}\n";
+            return false;
+        }
+    }
+
+    $pid = pcntl_fork();
+    if ($pid == -1) {
+        die("slave start fail.\n");
+    } else if ($pid) {
+        file_put_contents($sock, $pid);
+        chmod($sock, 0777);
+        echo "done.\n";
+    } else {
+        $loader = include __DIR__ . '/../../../libs/bootstrap.php';
+        $config = __DIR__ . '/../config/config.json';
+        $configuration = new \Libs\Configuration\Configuration($config);
+
+        $socket = new \Slave\Libs\SlaveSockets($configuration);
+        $socket->create()->bind()->listen();
+    }
+};
+
+$stop = function () use ($sock) {
+    echo "slave stop...\t";
+    if (!file_exists($sock)) {
+        echo "slave is not running.\n";
+        return false;
+    }
+    $pid = file_get_contents($sock);
+    $pid = (int)$pid;
+    exec("kill -9 {$pid}", $output);
+    exec("ps aux | grep {$pid} | grep -v grep | wc -l", $output);
+    if ($output[0] <= 0) {
+        echo "done.\n";
+        unlink($sock);
+    } else {
+        echo "error: You need to manually close process. pid: {$pid}\n";
+    }
+};
+
+switch ($action) {
+    case "start":
+        $start();
+        break;
+
+    case "restart":
+        $stop();
+        $start();
+        break;
+
+    case "stop":
+        $stop();
+        break;
+
+    default:
+        die("slave start|stop|restart\n");
+}
+
+exit;
