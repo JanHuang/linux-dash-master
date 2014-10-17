@@ -1,6 +1,6 @@
 <?php
 
-$socket = include __DIR__ . "/../scripts/master/client.php";
+$socket = include __DIR__ . "/../scripts/master/sbin/client.php";
 
 $host = isset($_GET['host']) ? (int)$_GET['host'] : 0;
 
