@@ -20,3 +20,4 @@
 > **Note:** **slave** 配置需要监听的机器列表 **host** **port** 
 
 4.配置完成后，打开 **application/index.php** 查看机器状态
+
